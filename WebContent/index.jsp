@@ -62,6 +62,10 @@
 	    <script  src="WebResources/soporte/soporte/SoporteController.js"></script>
 	    <script  src="WebResources/soporte/soporte/SoporteChildService.js"></script>
 	    <script  src="WebResources/soporte/soporte/SoporteChildController.js"></script>
+	    
+	    <script  src="WebResources/pila/pilusua/PilUsuaApp.js"></script>
+	    <script  src="WebResources/pila/pilusua/PilUsuaService.js"></script>
+	    <script  src="WebResources/pila/pilusua/PilUsuaController.js"></script>
 		
 		<script type="text/javascript" Language="JavaScript">
 			document.createElement('ng-view');

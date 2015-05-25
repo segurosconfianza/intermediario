@@ -26,5 +26,7 @@ public interface FrmTablasService{
 	public FrmTablas insert(FrmTablas frmtablas);
 
 	public FrmTablas listByTablcodi(String string);
+
+	public String listByTablcodis(String tablcodi);
 	
 }

@@ -153,4 +153,27 @@ public class FrmTablasRepositoryImpl implements FrmTablasRepository{
 			return null;
 		}
 	}
+	
+	/**
+	 * Metodo de consulta para los registros de la tabla FrmTablas por id
+	 * @value id = id de la llave primaria a consultar el registro
+	 * @return FrmTablas = objeto de la case FrmTablas que contiene los datos encontrados dado el id
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional
+	public List<Object[]> listsByTablcodi(String tablcodi){
+		try{
+			String sql = "select tablclav ,tablvast "
+					   + "from Frm_Tablas "
+					   + "where tablcodi = :id ";
+						
+			Query query = getSession().createSQLQuery(sql)
+					     .setParameter("id", tablcodi);
+			return query.list();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

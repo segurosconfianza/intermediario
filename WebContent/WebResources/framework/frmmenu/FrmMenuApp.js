@@ -21,6 +21,12 @@ FrmMainApp.config(['$routeProvider',
    	      },
    	      controller: 'FrmTransaccionController'
    	    }).
+   	    when('/PilUsua', {
+  	      templateUrl: function(params) {
+  	          return  WEB_SERVER+'PilUsua/';
+  	      },
+  	      controller: 'PilUsuaController'
+  	    }).
    	    otherwise({
    	      
    	    });

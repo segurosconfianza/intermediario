@@ -24,4 +24,6 @@ public interface FrmTablasRepository {
 	public FrmTablas insert(FrmTablas frmtablas);
 
 	public FrmTablas listByTablcodi(String tablcodi);
+
+	public List<Object[]> listsByTablcodi(String tablcodi);
 }
