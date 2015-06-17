@@ -20,14 +20,6 @@
 	
 	<mvc:annotation-driven/>
 	
-	<!-- Abstract Parent Beans -->
- 	<bean id="abstractDataSourceOracle" class="org.springframework.jndi.JndiObjectFactoryBean" abstract="true"/>
-	 	
-	<bean id="abstractSessionFactoryOracle" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" abstract="true"		
-		p:configLocation="classpath:hibernateOracle.cfg.xml" />
-	
-	<bean id="abstractTransactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager" abstract="true" />
-	
 	<!-- Beans generales al proyecto -->
 	<bean id="gson" class="com.google.gson.Gson" />
 	<bean id="typeConverter" class="com.confianza.webapp.utils.TypeConverter"/>
@@ -35,7 +27,5 @@
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
     	
 	<import resource="security-config.xml"/>
-	<import resource="datasource-webapp-config.xml"/>
-	<import resource="datasource-osiris-config.xml"/>
 	
 </beans>

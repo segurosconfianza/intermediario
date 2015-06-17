@@ -7,15 +7,50 @@
 <html lang="es" xmlns:ng="http://angularjs.org" id="ng-app" ng-app=FrmMainApp> 
 	<head>		
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Seguros Confianza</title>			
+		
+		<title>Seguros Confianza</title>
 		<%
 			Properties prop=new Properties();
 			prop.load(getServletContext().getResourceAsStream("/WEB-INF/Confianza.properties"));
 			
-			String WEB_SERVER = prop.getProperty("WEB_SERVER");				  	
+			String WEB_SERVER = prop.getProperty("WEB_SERVER");					
+			String INTERMEDIARIO_WEB_SERVER = prop.getProperty("INTERMEDIARIO_WEB_SERVER");
 	    %>	
-	        
-	    <script >var WEB_SERVER='<%out.print(WEB_SERVER);%>';</script>
+	    <script >var WEB_SERVER='<%out.print(WEB_SERVER);%>';	    		 
+	    		 var INTERMEDIARIO_WEB_SERVER='<%out.print(INTERMEDIARIO_WEB_SERVER);%>';
+	    		 var filterBetweenDate= '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
+								    	  '<div ng-click="col.sort($event)"ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>' +
+								    	  '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>'+
+								    	  '<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>'+
+								    	  '<div class="ngSortPriority">{{col.sortPriority}}</div>'+
+								    	  '<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div>'+
+							    	    '</div>'+
+							    	    '<input type="text" ng-click="stopClickProp($event)" placeholder="DD/MM/YYYY since..." ng-model="col.filterDateSince" ng-style="{ \'width\' : col.width - 14 + \'px\' }" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;"/>'+
+							    	    '<input type="text" ng-click="stopClickProp($event)" placeholder="DD/MM/YYYY until..." ng-model="col.filterDateUntil" ng-style="{ \'width\' : col.width - 14 + \'px\' }" style="position: absolute; top: 60px; bottom: 40px; left: 0; bottom:0;"/>'+
+							    	    '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>'+
+							    	    '<span class="glyphicon glyphicon-search" ng-click="executeQuery()" ng-style="{ \'width\' : 14 + \'px\', \'left\' : col.width - 14 + \'px\' }" style="position: absolute; top: 30px; bottom: 30px; cursor: pointer;"> </span>';
+				 var filterText='<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
+						    	  '<div ng-click="col.sort($event)"ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>' +
+						    	  '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>'+
+						    	  '<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>'+
+						    	  '<div class="ngSortPriority">{{col.sortPriority}}</div>'+
+						    	  '<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div>'+
+					    	    '</div>'+
+					    	    '<input type="text" ng-click="stopClickProp($event)" placeholder="Filter..." ng-model="col.filterText" ng-style="{ \'width\' : col.width - 14 + \'px\' }" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;"/>'+
+					    	    '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>'+
+					    	    '<span class="glyphicon glyphicon-search" ng-click="executeQuery()" ng-style="{ \'width\' : 14 + \'px\', \'left\' : col.width - 14 + \'px\' }" style="position: absolute; top: 30px; bottom: 30px; cursor: pointer;"> </span>';
+	    	     var filterBetweenNumber= '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
+									    	'<div ng-click="col.sort($event)"ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>' +
+									    	'<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>'+
+									    	'<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>'+
+									    	'<div class="ngSortPriority">{{col.sortPriority}}</div>'+
+									    	'<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div>'+
+								    	  '</div>'+
+								    	  '<input type="number" ng-click="stopClickProp($event)" placeholder="filter since..." ng-model="col.filterNumberSince" ng-style="{ \'width\' : col.width - 14 + \'px\', \'height\' : 28 + \'px\' }" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;"/>'+
+								    	  '<input type="number" ng-click="stopClickProp($event)" placeholder="filter until..." ng-model="col.filterNumberUntil" ng-style="{ \'width\' : col.width - 14 + \'px\', \'height\' : 28 + \'px\' }" style="position: absolute; top: 60px; bottom: 50px; left: 0; bottom:0;"/>'+
+								    	  '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>'+
+								    	  '<span class="glyphicon glyphicon-search" ng-click="executeQuery()" ng-style="{ \'width\' : 14 + \'px\', \'left\' : col.width - 14 + \'px\' }" style="position: absolute; top: 30px; bottom: 30px; cursor: pointer;"> </span>';					    	    
+	    </script>
 	    
 		<script  src="lib/Angular/1.3.2/angular.js"></script>	    		
 	    <script  src="lib/Angular/1.3.2/angular-route.js"></script>
@@ -43,32 +78,17 @@
 	    <script  src="WebResources/framework/frmmenu/FrmMenuApp.js"></script>
 	    <script  src="WebResources/framework/frmmenu/FrmMenuService.js"></script>
 	    <script  src="WebResources/framework/frmmenu/FrmMenuController.js"></script>
-	    <script  src="WebResources/framework/frmmenu/FrmMenuFilter.js"></script>
-	        					
-		<script  src="WebResources/framework/frmperfil/FrmPerfilApp.js"></script>
-	    <script  src="WebResources/framework/frmperfil/FrmPerfilService.js"></script>
-	    <script  src="WebResources/framework/frmperfil/FrmPerfilController.js"></script>
-	    <script  src="WebResources/framework/frmperfmodu/FrmPerfmoduController.js"></script>
-	    
-	    <script  src="WebResources/framework/frmtransaccion/FrmTransaccionApp.js"></script>
-	    <script  src="WebResources/framework/frmtransaccion/FrmTransaccionService.js"></script>
-	    <script  src="WebResources/framework/frmtransaccion/FrmTransaccionController.js"></script>
-	    <script  src="WebResources/framework/frmlog/FrmLogController.js"></script>
-	    <script  src="WebResources/framework/frmauditoria/FrmAuditoriaController.js"></script>
-	    <script  src="WebResources/soporte/sopmotivo/SopMotivoController.js"></script>
-	    
-	    <script  src="WebResources/soporte/soporte/SoporteApp.js"></script>
-	    <script  src="WebResources/soporte/soporte/SoporteService.js"></script>
-	    <script  src="WebResources/soporte/soporte/SoporteController.js"></script>
-	    <script  src="WebResources/soporte/soporte/SoporteChildService.js"></script>
-	    <script  src="WebResources/soporte/soporte/SoporteChildController.js"></script>
+	    <script  src="WebResources/framework/frmmenu/FrmMenuFilter.js"></script>	        							
+	    <script  src="WebResources/framework/frmmenu/FrmMenuDirective.js"></script>
 		
+		<script  src="WebResources/pila/planilla/PlanillaService.js"></script>
+	    <script  src="WebResources/pila/planilla/PlanillaController.js"></script>
+	    <script  src="WebResources/pila/Adjunto/FmtAdjuntoController.js"></script>
+	    <script  src="WebResources/pila/Auditoria/FmtAuditoriaController.js"></script>
+	    <script  src="WebResources/pila/Estado/FmtEstadoController.js"></script> 
+	    
 		<script type="text/javascript" Language="JavaScript">
-			document.createElement('ng-view');
-		
-		    $(document).ready(function() {
-		        angular.bootstrap(document);
-		    });	
+			document.createElement('ng-view');				    
 	        
 		    jQuery(document).ready(function ($) {
 		        $('#tabs').tab();
@@ -77,7 +97,7 @@
 										
 	</head>		      
 	
-	<body ng-controller="FrmMenuController">		
+	<body ng-controller="FrmMenuController">
 		<div id="encabezado">
 			<header>
 				<div>

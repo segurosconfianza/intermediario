@@ -11,88 +11,19 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
 	<context:property-placeholder system-properties-mode="OVERRIDE" location="WEB-INF/Confianza.properties"/>
-
-	<security:http entry-point-ref="casEntryPoint" use-expressions="true" auto-config="true">				
-		<security:form-login login-page="${CASSERVER}login.jsp" authentication-failure-handler-ref="failureHandler" />
-		<security:logout invalidate-session="true" logout-success-url="${SERVER}" delete-cookies="JSESSIONID"/>
+	
+	<security:http use-expressions="true" access-denied-page="/denied.jsp">
+		<security:form-login login-page="/login.jsp" authentication-failure-url="/login.jsp?login_error=true" default-target-url="/index.jsp"/>
 		<security:intercept-url pattern="/index.jsp" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/confianza/**" access="isAuthenticated()"/>
-		<security:custom-filter position="CAS_FILTER" ref="casFilter" />		
-		<security:custom-filter ref="requestSingleLogoutFilter" before="LOGOUT_FILTER"/>
-    	<security:custom-filter ref="singleLogoutFilter" before="CAS_FILTER"/>
+		<security:logout invalidate-session="true" logout-success-url="/login.jsp" delete-cookies="JSESSIONID"/>		
 	</security:http>
-	
-	<bean id="myAuthenticationSuccessHandler" class="com.confianza.webapp.service.security.MySimpleUrlAuthenticationSuccessHandler" />
-	
-	<security:authentication-manager alias="authenticationManager">
-		<security:authentication-provider ref="casAuthenticationProvider" />
-	</security:authentication-manager>
-	
-	<bean id="casFilter" class="org.springframework.security.cas.web.CasAuthenticationFilter" p:authenticationManager-ref="authenticationManager"/>
-	
-	<bean id="singleLogoutFilter" class="org.jasig.cas.client.session.SingleSignOutFilter"/>
-    
-    <bean id="requestSingleLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
-	    <constructor-arg value="${CASSERVER}logout"/>
-	    <constructor-arg>
-	      <bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"/>
-	    </constructor-arg>
-	    <property name="filterProcessesUrl" value="/j_spring_cas_security_logout"/>
-  	</bean>
-  	
-    <bean id="failureHandler" class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler"
-        p:defaultFailureUrl="${CASSERVER}login.jsp?login_error=true"
-    />  
-    
-	<bean id="casEntryPoint" class="org.springframework.security.cas.web.CasAuthenticationEntryPoint"
-		p:loginUrl="${CASSERVER}login"
-		p:serviceProperties-ref="serviceProperties"
-	/>		  					
 
-	<bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" 
-		p:defaultFailureUrl="${CASSERVER}login.jsp"
-	/>
-			    
-	<bean id="casAuthenticationProvider" class="org.springframework.security.cas.authentication.CasAuthenticationProvider"
-		p:authenticationUserDetailsService-ref="userDetailsService"		
-		p:serviceProperties-ref="serviceProperties" 
-		p:ticketValidator-ref="ticketValidator"
-		p:key="casldap"
-	/>	 	
+	<security:authentication-manager>
+		<security:authentication-provider ref="AutenticateImpl" />		
+	</security:authentication-manager>	
 
-	<bean id="userDetailsService" class="com.confianza.webapp.service.security.userDetailsService"/>
+	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder"/>
 	
-	<bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties"		
-		p:service="${SERVER}/j_spring_cas_security_check" 	
-		p:sendRenew="false"
-	/>
-	
-      <bean id="ticketValidator" class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator"
-		c:_0="${CASSERVER}"						
-	/> 	 	
-		
-	<security:global-method-security secured-annotations="enabled" jsr250-annotations="enabled" access-decision-manager-ref="accessDecisionManager" />
-	
-	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
-		<property name="decisionVoters">
-			<list>
-				<bean class="org.springframework.security.access.vote.RoleVoter">
-					<property name="rolePrefix">
-						<value />
-					</property>
-				</bean>
-			</list>
-		</property>
-	</bean>
-
-	<bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
-	
-	<ldap:context-source
-          url="ldap://192.168.100.2:389"
-          base="dc=confianza,dc=local"
-          username="webappconfianza"
-          password="Confianza01" />
-          
-    <ldap:ldap-template id="ldapTemplate" ignore-partial-result="true" search-scope="SUBTREE" />
-		
+	<bean id="AutenticateImpl" class="com.confianza.webapp.service.security.AutenticateIntermediario"/>	
 </beans>
