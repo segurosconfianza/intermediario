@@ -61,7 +61,12 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	    	    				});    				    				 		    				    		
 	    	    			}
 	    	    			
-	    	    			columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe};
+	    	    			if($scope.columns[i].camptipo=="D" || $scope.columns[i].camptipo=="T")
+	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenDate};
+	    	    			else if($scope.columns[i].camptipo=="O" || $scope.columns[i].camptipo=="I" || $scope.columns[i].camptipo=="L" || $scope.columns[i].camptipo=="F" || $scope.columns[i].camptipo=="B")
+	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenNumber};
+	    	    			else
+	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterText};
 	    	    		}
 	    	    		
 	    	    		$scope.columnDefs=columns;	
