@@ -11,7 +11,7 @@
 		<h2><label ng-bind-html="title |to_trusted"></label></h2><br/>		    
 		    
 		<h4><label ng-bind-html="description | to_trusted"></label></h4>
-    	<custom-grid cols="columnDefs" selected-items="selectedItems" custom-options="gridOptions" evento="gridEvento" data-ng-if="directiveGrid"></custom-grid>
+    	<custom-grid cols="columnDefs" selected-items="selectedItems" custom-options="gridOptions" evento="gridEvento" icons="iconForeesta" data-ng-if="directiveGrid"></custom-grid>
         
     	<!-- ventana modal -->
     	<!-- Modal New -->
@@ -21,7 +21,7 @@
 		      <div class="modal-header">
 		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 		        <h4 class="modal-title" id="myModalLabel"><label ng-bind-html="title |to_trusted"></label></h4>
-		    	<h4>Por favor, ingrese los siguientes datos para consultar la informaci&oacute;n. (<font color="red">*</font>) Campos obligatorios.<h4>
+		    	<h4>Por favor, ingrese los siguientes datos para consultar la informaci&oacute;n. <br>(<font color="red">*</font>) Campos obligatorios.</br><h4>
 		      </div>
 		      <div class="modal-body">
 		        <form name="formInsert" class="form-horizontal" role="form">
@@ -50,11 +50,11 @@
 			  <div class="col-sm-3" ng-if="column.camptipo == 'S'">			
 				<input style="width:100%;" type="text" name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" ng-required="column.camprequ">
 			  </div>
-              <div class="col-sm-3" ng-if="column.camptipo == 'I' || column.camptipo == 'L'">				
-				<input ng-pattern="/^(0|\-?[1-9][0-9]*)$/" style="width:100%;" type="number" name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" ng-required="column.camprequ">
+              <div class="col-sm-3" ng-if="column.camptipo == 'I' || column.camptipo == 'L'">	
+				<input style="width:100%;" type="text" name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" ng-required="column.camprequ" ui-number-mask="0">
 			  </div>
 			  <div class="col-sm-3" ng-if="column.camptipo == 'F' || column.camptipo == 'O'">				
-				<input style="width:100%;" type="number" name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" ng-required="column.camprequ" step="any">
+				<input style="width:100%;" type="text" name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" ng-required="column.camprequ" step="any" ui-number-mask="2">
 			  </div>
 			  <div class="col-sm-3" ng-if="column.camptipo == 'D'">			
               	<input style="width:100%;" type="text" datepicker-popup="dd/MM/yyyy" ng-model="Campos[column.campnomb]" is-open="campoDate" ng-click="campoDate=true" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="column.camprequ" ui-date ui-date-format="dd/MM/yyyy" close-text="Cerrar" current-text="Hoy" clear-text="Limpiar"/>
@@ -74,7 +74,10 @@
 			</div>
 	      	<tabset>		    
 			    <tab heading="{{ventanaTitulo}}" ng-controller="FmtAdjuntoController" ng-click="fixGridRendering()">
-			      	<h3>&nbsp;&nbsp;</h3>	                
+			    	<h3>&nbsp;&nbsp;</h3>
+			      	<div class="panel" align="center" ng-if="loadPdf">
+						<button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Cargando...</button>
+					</div>                
       				<object data="{{content}}" style="width:100%;height:100%;"></object>
       				
 			    </tab>

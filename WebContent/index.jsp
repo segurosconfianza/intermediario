@@ -80,6 +80,7 @@
 	    <script  src="WebResources/framework/frmmenu/FrmMenuController.js"></script>
 	    <script  src="WebResources/framework/frmmenu/FrmMenuFilter.js"></script>	        							
 	    <script  src="WebResources/framework/frmmenu/FrmMenuDirective.js"></script>
+	    <script  src="WebResources/framework/frmmenu/masks.js"></script>
 		
 		<script  src="WebResources/pila/planilla/PlanillaService.js"></script>
 	    <script  src="WebResources/pila/planilla/PlanillaController.js"></script>

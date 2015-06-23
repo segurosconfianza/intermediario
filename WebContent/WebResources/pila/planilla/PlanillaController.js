@@ -9,7 +9,7 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	
 	//botones de los formularios modal
 	$scope.buttonNew=false;
-	$scope.buttonEdit=false;
+	$scope.buttonEdit=false; 
 	
 	//Evento del calendario
 	$scope.open = function($event,opened) {
@@ -26,6 +26,12 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 			$scope.intermediarioUser=dataResponse.data;
 		});
 		
+		Service.loadI18n().then(function(dataResponse) {        	                                        	
+	       	 
+			Service.setI18n(dataResponse.data);
+			Service.prepForLoadI18n();
+        });
+		
 		Service.loadData().then(function(dataResponse) {  
 			if(dataResponse.data.error!=undefined)
 	    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
@@ -34,55 +40,64 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	    		$scope.description=dataResponse.data.descri;
 	    		$scope.version=dataResponse.data.version.vefocons;
 	    		
-	    		//una vez cargada la version podemos cargar los campos de esa version del formato
-	    		Service.getParams($scope.version).then(function(dataResponse) {  
-	    	    	
-	    	    	if(dataResponse.data.error!=undefined)
+	    		Service.getTbtablas('foreesta').then(function(dataResponse) {  
+	    			if(dataResponse.data.error!=undefined)
 	    	    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 	    	    	else{
-	    	    		$scope.columns=dataResponse.data.data;
-	    	    		columns=[];
-	    	    		columns[0]={field: "forecons", displayName: "Consecutivo", headerCellTemplate: filterBetweenNumber};
-	    	    		columns[1]={field: "forefech", displayName: "Fecha", headerCellTemplate: filterBetweenDate};
-	    	    		columns[2]={field: "foreesta", displayName: "Estado", visible: false};
-	    	    		columns[3]={field: "tablvast", displayName: "Estado", headerCellTemplate: filterText};
-	    	    		//recorro los campos para cargar los data de los combos
-	    	    		for(i=0; i<$scope.columns.length;i++){    			
-	    	    			//si el tipo de dato es columna
-	    	    			if($scope.columns[i].paratida=='CS' || $scope.columns[i].paratida=='CI'){    				    				    				
-	    	    				//se pasa el codigo del combo
-	    	    				Service.getCombo($scope.columns[i].paracomb).then(function(dataResponse) {    					    					
-	    	    					if(dataResponse.data.error!=undefined)
-	    	    			    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
-	    	    			    	else{    			   
-	    	    			    		//se carga la data en los options
-	    	    			    		$scope.options[dataResponse.data.combo] = dataResponse.data.data;      			    		
-	    	    			    	}
-	    	    				});    				    				 		    				    		
-	    	    			}
-	    	    			
-	    	    			if($scope.columns[i].camptipo=="D" || $scope.columns[i].camptipo=="T")
-	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenDate};
-	    	    			else if($scope.columns[i].camptipo=="O" || $scope.columns[i].camptipo=="I" || $scope.columns[i].camptipo=="L" || $scope.columns[i].camptipo=="F" || $scope.columns[i].camptipo=="B")
-	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenNumber};
-	    	    			else
-	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterText};
-	    	    		}
+	    	    		$scope.tbforeesta=dataResponse.data;
+	    	    		$scope.iconForeesta={};	
+	    	    		angular.forEach($scope.tbforeesta, function(reg) {
+	    	    			$scope.iconForeesta[reg.label]=reg.icon;	
+	    	        	});
 	    	    		
-	    	    		$scope.columnDefs=columns;	
-	    	    		$scope.directiveGrid=true;
-	    	    		
-	    	    		$scope.basicSearchQuery=[{campo: 'forevefo', tipo: "=", val1: $scope.version, tipodato: "Number"},{campo: 'foreuser', tipo: "=", val1: $scope.intermediarioUser, tipodato: "String"}];
-	    	    	}
-	    	    });	
+	    	    		//una vez cargada la version podemos cargar los campos de esa version del formato
+	    	    		Service.getParams($scope.version).then(function(dataResponse) {  
+	    	    	    	
+	    	    	    	if(dataResponse.data.error!=undefined)
+	    	    	    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    	    	    	else{
+	    	    	    		
+	    	    	    		$scope.columns=dataResponse.data.data;
+	    	    	    		columns=[];
+	    	    	    		columns[0]={field: "forecons", displayName: getName(Service.getI18n(), "forecons"), headerCellTemplate: filterBetweenNumber};
+	    	    	    		columns[1]={field: "forefech", displayName: getName(Service.getI18n(), "forefech"), headerCellTemplate: filterBetweenDate};
+	    	    	    		columns[2]={field: "foreesta", displayName: getName(Service.getI18n(), "foreesta"), visible: false};
+	    	    	    		columns[3]={field: "tablvast", displayName: getName(Service.getI18n(), "foreesta"), headerCellTemplate: filterText, cellTemplate: '<div><img src="{{icons[row.getProperty(col.field)]}}" width="20" height="20"></img>{{row.getProperty(col.field)}}</div>' };
+	    	    	    		//recorro los campos para cargar los data de los combos
+	    	    	    		for(i=0; i<$scope.columns.length;i++){    				    	    	    		
+	    	    	    			//si el tipo de dato es columna
+	    	    	    			if($scope.columns[i].camptipo=='CS' || $scope.columns[i].camptipo=='CI'){    				    				    				
+	    	    	    				//se pasa el codigo del combo
+	    	    	    				Service.getCombo($scope.columns[i].campcomb).then(function(dataResponse) {    					    					
+	    	    	    					if(dataResponse.data.error!=undefined)
+	    	    	    			    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    	    	    			    	else{    			   
+	    	    	    			    		//se carga la data en los options
+	    	    	    			    		$scope.options[dataResponse.data.combo] = dataResponse.data.data;      			    		
+	    	    	    			    	}
+	    	    	    				});    				    				 		    				    		
+	    	    	    			}
+	    	    	    			
+	    	    	    			if($scope.columns[i].camptipo=="D" || $scope.columns[i].camptipo=="T")
+	    	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenDate};
+	    	    	    			else if($scope.columns[i].camptipo=="O" || $scope.columns[i].camptipo=="I" || $scope.columns[i].camptipo=="L" || $scope.columns[i].camptipo=="F")
+	    	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenNumber, cellTemplate:'<div>{{row.getProperty(col.field) | number}}</div>'};
+	    	    	    			else if($scope.columns[i].camptipo=="B")
+	    	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenNumber};
+	    	    	    			else
+	    	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterText};
+	    	    	    		}
+	    	    	    		
+	    	    	    		$scope.columnDefs=columns;	
+	    	    	    		$scope.directiveGrid=true;
+	    	    	    		
+	    	    	    		$scope.basicSearchQuery=[{campo: 'forevefo', tipo: "=", val1: $scope.version, tipodato: "Number"},{campo: 'foreuser', tipo: "=", val1: $scope.intermediarioUser, tipodato: "String"}];
+	    	    	    	}
+	    	    	    });	
+	    	    	}	    			
+	    		});	    			    		    			    	
 	    	}
-		});
-		
-		Service.loadI18n().then(function(dataResponse) {        	                                        	
-       	 
-			Service.setI18n(dataResponse.data);
-			Service.prepForLoadI18n();
-        });
+		});				
 	}
 	
     $scope.gridOptions = {  
@@ -91,7 +106,9 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
         afterSelectionChange: function (rowItem, event) {
         	for(i=0; i<$scope.columns.length;i++){            		
         		if($scope.columns[i].camptipo=='O' || $scope.columns[i].camptipo=='F')
-        			$scope.Campos[$scope.columns[i].campnomb]=parseFloat(rowItem.entity[$scope.columns[i].campnomb].toString(),20);
+        			$scope.Campos[$scope.columns[i].campnomb]=parseFloat(rowItem.entity[$scope.columns[i].campnomb]);
+        		else if($scope.columns[i].camptipo=='I' || $scope.columns[i].camptipo=='L')
+        			$scope.Campos[$scope.columns[i].campnomb]=parseInt(rowItem.entity[$scope.columns[i].campnomb]);
         		else
         			$scope.Campos[$scope.columns[i].campnomb]=rowItem.entity[$scope.columns[i].campnomb];
         	}
@@ -99,8 +116,35 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
         	
         	Service.prepForLoad(rowItem.entity.forecons);      
         }
-    };
-     
+    };                  
+    
+    function getName(i18n,colum){
+    	var log = [];
+    	angular.forEach(i18n, function(fila, index) {
+    		if(fila.etincamp==colum)  
+    			this.push(fila);
+   		}, log);
+    	
+    	if(log[0]!=null)
+    		return log[0].etinetiq;
+    	else 
+    		return "";
+    }
+    
+    $scope.whatClassIsIt= function(column){
+    	var log = [];
+    	
+    	angular.forEach($scope.columnDefs, function(fila, index) {
+    		if(fila.field==column)
+    			this.push(fila);
+   		}, log);
+    	
+    	if(log[0]!=null)
+    		return log[0].displayName;
+    	else 
+    		return "";
+    } 
+    
    //Funciones de las CRUD
    $scope.createRecordForm= function(){
 	    $scope.buttonNew=true;
@@ -173,7 +217,8 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 			}
 						
 		}
-		else if(verify){		
+		
+		if(verify){		
 						
 			formData=new FormData();
 			for(i=0;i<file.length;i++){				
@@ -255,7 +300,6 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
     }
 		
 	$scope.$on('gridEvento', function(event, pageSize, currentPage, order, searchQuery) {   
-		console.log('gridEvento');
 		$scope.pageSize=pageSize;
 		$scope.currentPage=currentPage;
 		$scope.order=order;
@@ -275,4 +319,4 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
         });
 	}
  }            
-])
+]);

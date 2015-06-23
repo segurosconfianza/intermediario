@@ -9,7 +9,7 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
 		return $http({
 	        method: 'GET',
 	        url: WEB_SERVER+'Intermediario/FmrI18n/listModulo.json',
-	        params: {modulo: 'FMT_AUDITORIA,FMT_ESTADO,FMT_ADJUNTO' }
+	        params: {modulo: 'FMT_FORMREGI,FMT_AUDITORIA,FMT_ESTADO,FMT_ADJUNTO,PIL_USUA' }
 	     });
 	 } 
 	
@@ -78,8 +78,16 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
 	this.getCombo = function(consultaId) {    
 		return $http({
 	        method: 'GET',
-	        url: WEB_SERVER+'FrmConsulta/listComboDynamic.json',
+	        url: WEB_SERVER+'Intermediario/FrmConsulta/listComboDynamic.json',
 	        params: {conscons: consultaId}
+	     });
+	 }
+	
+	this.getTbtablas = function(tablcodi) {    
+		return $http({
+	        method: 'GET',
+	        url: WEB_SERVER+'Intermediario/FrmTablas/listByTablcodi.json',
+	        params: {tablcodi: tablcodi}
 	     });
 	 }
 	
