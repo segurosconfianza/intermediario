@@ -289,10 +289,13 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 			formData.append("paramsData", angular.toJson($scope.camposSendData));
 						
 			Service.updateRecord(formData, $scope.Campos["forecons"], $scope.intermediarioUser, $scope.version).then(function(dataResponse) {
-				 	      
-        		alert(dataResponse.data);	        				        			
-	        	
-        		$scope.loadMyGrid();
+				 	
+				if(dataResponse.data.error!=undefined)
+		    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+		    	else{
+		    		$scope.loadMyGrid();
+		    		alert(dataResponse.data);	  
+		    	}				        		      				        				        	        
 	        }); 						
 		}else{ 
 			alert("Datos vacios o incorrectos: Favor diligencie todos los campos");
