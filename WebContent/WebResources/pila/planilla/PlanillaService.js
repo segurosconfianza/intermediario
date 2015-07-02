@@ -9,7 +9,7 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
 		return $http({
 	        method: 'GET',
 	        url: WEB_SERVER+'Intermediario/FmrI18n/listModulo.json',
-	        params: {modulo: 'FMT_FORMREGI,FMT_AUDITORIA,FMT_ESTADO,FMT_ADJUNTO,PIL_USUA' }
+	        params: {modulo: 'FMT_FORMREGI,FMT_AUDITORIA,FMT_ESTADO,FMT_ADJUNTO,PIL_USUA,PIL_MOTIFORM' }
 	     });
 	 } 
 	
@@ -96,6 +96,7 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
         $rootScope.$broadcast('handleBroadcastAuditoriaI18n');
         $rootScope.$broadcast('handleBroadcastEstadoI18n');
         $rootScope.$broadcast('handleBroadcastAdjuntoI18n');
+        $rootScope.$broadcast('handleBroadcastMotiformI18n');
     };
         	
 	this.prepForLoad = function(id) {
@@ -107,28 +108,31 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
         $rootScope.$broadcast('handleBroadcastAuditoria');
         $rootScope.$broadcast('handleBroadcastEstado');
         $rootScope.$broadcast('handleBroadcastAdjunto');
+        $rootScope.$broadcast('handleBroadcastMotiform');
     };
     
-    this.getDataAuditoria = function(pageSize, page, id) {  
-		if(id!=0)
-		{
-    		return $http({
-    	        method: 'GET',
-    	        url: WEB_SERVER+'Intermediario/FmtAuditoria/listAll.json',
-    	        params: {page: page, pageSize: pageSize, forecons: id }
-    	     });
-		}
+    this.getDataMotiform = function(pageSize, page, order, filter) { 
+		return $http({
+			method: 'GET', 
+	        url: WEB_SERVER+'PilMotiform/listAll.json',
+	        params: { pageSize: pageSize, page: page, order: order, filter: filter},
+	     });
+    } 
+    
+    this.getDataAuditoria = function(pageSize, page, order, filter) {  		
+		return $http({
+	        method: 'GET',
+	        url: WEB_SERVER+'FmtAuditoria/listAll.json',
+	        params: {pageSize: pageSize, page: page, order: order, filter: filter }
+	     });		
 	 }
     
-    this.getDataEstado = function(pageSize, page, id) {  
-		if(id!=0)
-		{
-    		return $http({
-    	        method: 'GET',
-    	        url: WEB_SERVER+'Intermediario/FmtEstado/listAll.json',
-    	        params: {page: page, pageSize: pageSize, forecons: id}
-    	     });
-		}
+    this.getDataEstado = function(pageSize, page, order, filter) {  		
+		return $http({
+	        method: 'GET',
+	        url: WEB_SERVER+'FmtEstado/listAll.json',
+	        params: {pageSize: pageSize, page: page, order: order, filter: filter}
+	     });
 	 }
     
     this.getDataAdjunto = function(id) {  
@@ -143,4 +147,12 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
     	     });
 		}
 	 }
+    
+    this.getMotivos = function() {    		    		
+		return $http({
+	        method: 'GET',
+	        url:  WEB_SERVER+'PilMotivo/listAll.json', 
+	        params: {pageSize: 0, page: 0}
+	     });
+	 } 
 });    	

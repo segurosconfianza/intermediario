@@ -1,100 +1,49 @@
 var FrmMainApp=angular.module('FrmMainApp');
 
-FrmMainApp.controller('FmtAuditoriaController', ['$scope', '$modal', 'PlanillaService',function($scope, $modal,PlanillaService) {
-	
-	$scope.showModal = false;
+FrmMainApp.controller('FmtAuditoriaController', ['$scope', 'PlanillaService',function($scope, Service) {
 	
 	$scope.$on('handleBroadcastAuditoria', function() {
 		
-		$scope.forecons = PlanillaService.forecons;
+		$scope.forecons = Service.id;
 		
-        PlanillaService.getDataAuditoria(50, 1, PlanillaService.id).then(function(dataResponse) {   	        	
-	        if(dataResponse.data.error!=undefined){
-	        	alert(dataResponse.data.tituloError+': '+dataResponse.data.error);	       
-        	}
-        	else{ 
-        		if(dataResponse.data.data!=null){
-        			$scope.setPagingData(dataResponse.data.data,50,1);
-        			$scope.totalServerItems = dataResponse.data.count;
-        		}
-        	}
-        });	        
+		$scope.loadMyGrid(); 	        
     }); 
 	
 	$scope.$on('handleBroadcastAuditoriaI18n', function() {
 		
 		loadI18n();	 
     }); 
+    		        	    
+    function loadI18n() {        	                                        	
     	
-	$scope.filterOptions = {
-        filterText: "",
-        useExternalFilter: true
-    };
-    
-    $scope.totalServerItems = 0;
-    
-    $scope.pagingOptions = {
-        pageSizes: [5, 10, 20, 50],
-        pageSize: 50,
-        currentPage: 1
-    };  
-    
-    $scope.setPagingData = function(data, page, pageSize){	            
-        $scope.myData = data;
-        $scope.totalServerItems = data.length;
-        if (!$scope.$$phase) {
-            $scope.$apply();
-        }
-    };
-    
-    $scope.getPagedDataAsync = function (pageSize, page, searchText) {
-    	
-        setTimeout(function () {
-            var data;
-            if (searchText) {
-                var ft = searchText.toLowerCase();
-                
-                PlanillaService.getDataAuditoria(pageSize, page, PlanillaService.id).then(function(dataResponse) {
-                	if(dataResponse.data.error!=undefined){
-                		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
-                	}
-                	else{ 
-        	            data = dataResponse.data.data.filter(function(item) {
-                            return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
-                        });
-                        $scope.setPagingData(data,page,pageSize);
-                        $scope.totalServerItems = dataResponse.data.count;
-                	}
-    	        });   
-            } else {
-            	PlanillaService.getDataAuditoria(pageSize, page, PlanillaService.id).then(function(dataResponse) {   
-            		if(dataResponse.data.error!=undefined){
-            			alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
-            		}
-                	else{ 
-                		if(dataResponse.data.data!=null){
-                			$scope.setPagingData(dataResponse.data.data,page,pageSize);
-                			$scope.totalServerItems = dataResponse.data.count;
-                		}
-                	}
-    	        });    
+    	columns=[ { field: "audicons", displayName: getName(Service.getI18n(), "audicons", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterBetweenNumber } ,
+    	          { field: "auditran", displayName: getName(Service.getI18n(), "auditran", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterBetweenNumber } ,
+    	          { field: "auditabl", displayName: getName(Service.getI18n(), "auditabl", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterText } ,
+    	          { field: "audicopk", displayName: getName(Service.getI18n(), "audicopk", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterText } ,
+    	          { field: "audicamp", displayName: getName(Service.getI18n(), "audicamp", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterText } ,
+    	          { field: "audivaan", displayName: getName(Service.getI18n(), "audivaan", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterText } ,
+    	          { field: "audivanu", displayName: getName(Service.getI18n(), "audivanu", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterText }  
+             ];
+        $scope.columnDefs=columns;
+        $scope.ventanaTitulo=getName(Service.getI18n(), "-", "FMT_AUDITORIA");
+        
+        $scope.gridOptions = {  
+        	sortInfo:{ fields: ['audicons'], directions: ['desc']},
+        	selectedItems: [],
+            afterSelectionChange: function (rowItem, event) {
+            	$scope.audicons = rowItem.entity.audicons; 
+            	 $scope.auditran = rowItem.entity.auditran; 
+            	 $scope.auditabl = rowItem.entity.auditabl; 
+            	 $scope.audicopk = rowItem.entity.audicopk; 
+            	 $scope.audicamp = rowItem.entity.audicamp; 
+            	 $scope.audivaan = rowItem.entity.audivaan;    	                    	                    	   
+            	 $scope.audivanu = rowItem.entity.audivanu;
             }
-        }, 100);
-    };
-	
-    $scope.$watch('pagingOptions', function (newVal, oldVal) {
-        if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
-          $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-        }
-    }, true);
+        };        
+        
+        $scope.directiveGrid=true;
+    }
     
-    $scope.$watch('filterOptions', function (newVal, oldVal) {
-        if (newVal !== oldVal) {
-          $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-        }
-    }, true);
-	        
-          
     function getName(i18n,colum,modulo){
     	var log = [];
     	angular.forEach(i18n, function(fila, index) {
@@ -105,19 +54,6 @@ FrmMainApp.controller('FmtAuditoriaController', ['$scope', '$modal', 'PlanillaSe
     	return log[0].etinetiq;        	
     }
     
-    function loadI18n() {        	                                        	
-    	
-    	columns=[ { field: "audicons", displayName: getName(PlanillaService.getI18n(), "audicons", "FMT_AUDITORIA"), visible: true } ,
-    	          { field: "auditran", displayName: getName(PlanillaService.getI18n(), "auditran", "FMT_AUDITORIA"), visible: true } ,
-    	          { field: "auditabl", displayName: getName(PlanillaService.getI18n(), "auditabl", "FMT_AUDITORIA"), visible: true } ,
-    	          { field: "audicopk", displayName: getName(PlanillaService.getI18n(), "audicopk", "FMT_AUDITORIA"), visible: true } ,
-    	          { field: "audicamp", displayName: getName(PlanillaService.getI18n(), "audicamp", "FMT_AUDITORIA"), visible: true } ,
-    	          { field: "audivaan", displayName: getName(PlanillaService.getI18n(), "audivaan", "FMT_AUDITORIA"), visible: true } ,
-    	          { field: "audivanu", displayName: getName(PlanillaService.getI18n(), "audivanu", "FMT_AUDITORIA"), visible: true }  
-             ];
-        $scope.columnDefs=columns;
-        $scope.ventanaTitulo=getName(PlanillaService.getI18n(), "-", "FMT_AUDITORIA");
-    }
     
     $scope.whatClassIsIt= function(column){
     	var log = [];
@@ -127,35 +63,44 @@ FrmMainApp.controller('FmtAuditoriaController', ['$scope', '$modal', 'PlanillaSe
     			this.push(fila);
    		}, log);
     	
-    	return log[0].displayName;
+    	if(log[0]!=undefined)
+    		return log[0].displayName;
+    	else
+    		return "";  
     }
-    
-    $scope.gridOptions = {
-            data: 'myData',
-            enablePaging: true,
-            showFooter: true,
-            totalServerItems:'totalServerItems',
-            pagingOptions: $scope.pagingOptions,
-            filterOptions: $scope.filterOptions,
-            multiSelect: false,
-            columnDefs:'columnDefs',
-            selectedItems: [],
-            showColumnMenu: true,
-            enableColumnResize: true,
-            afterSelectionChange: function (rowItem, event) {                	
-            	 $scope.audicons= rowItem.entity.audicons,
-	           	 $scope.auditran= rowItem.entity.auditran,
-	           	 $scope.auditabl= rowItem.entity.auditabl,
-	           	 $scope.audicopk= rowItem.entity.audicopk,
-	           	 $scope.audicamp= rowItem.entity.audicamp,
-	           	 $scope.audivaan= rowItem.entity.audivaan,
-	           	 $scope.audivanu= rowItem.entity.audivanu                 
-            }
-    };                              	                     
-	
+        
     $scope.fixGridRendering = function() {
     	$(window).resize();
     };
+    
+    $scope.$on('gridEvento', function(event, pageSize, currentPage, order, searchQuery) {   
+		$scope.pageSize=pageSize;
+		$scope.currentPage=currentPage;
+		$scope.order=order;
+		$scope.searchQuery=searchQuery;
+		
+    	if($scope.directiveGrid)
+    		$scope.loadMyGrid();
+    });
+	
+	$scope.loadMyGrid= function(){	
+		
+		if($scope.forecons!=undefined){
+			$scope.basicSearchQuery=[{campo: 'auditabl', tipo: "IN", val1: '[FMT_FORMREGI,FMT_VALOCAMP]', tipodato: "String"},{campo: 'audicopk', tipo: "=", val1: $scope.forecons, tipodato: "Number"}];
+			
+			if($scope.searchQuery!=undefined)
+				$scope.searchQuery=$scope.searchQuery.concat($scope.basicSearchQuery);
+			else
+				$scope.searchQuery=$scope.basicSearchQuery;
+			
+			Service.getDataAuditoria($scope.pageSize, $scope.currentPage, $scope.order, $scope.searchQuery).then(function(dataResponse) {
+	    		if(dataResponse.data.error!=undefined)
+	    			alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	        	else 
+	        		$scope.$broadcast('loadDataGrid',dataResponse.data.data, dataResponse.data.count, $scope.pageSize, $scope.currentPage);
+	        });
+		}
+	}	
 
-    }            
-    ])
+}            
+])

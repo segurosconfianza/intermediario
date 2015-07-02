@@ -74,40 +74,16 @@
 			</div>
 	      	<tabset>		    
 			    <tab heading="{{ventanaTitulo}}" ng-controller="FmtAdjuntoController" ng-click="fixGridRendering()">
-			    	<h3>&nbsp;&nbsp;</h3>
+			      	<h3>&nbsp;&nbsp;</h3>
 			      	<div class="panel" align="center" ng-if="loadPdf">
 						<button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Cargando...</button>
-					</div>                
+					</div>	                
       				<object data="{{content}}" style="width:100%;height:100%;"></object>
       				
-			    </tab>
-			    <tab heading="{{ventanaTitulo}}" ng-controller="FmtAuditoriaController" ng-click="fixGridRendering()">
-			      	<h3>{{ventanaTitulo}}&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalAudito"> Ver <span class="glyphicon glyphicon-eye-open"> </span></button></h3>	                
-	      			<div class="gridStyle" ng-grid="gridOptions"></div>
-	      			
-	      			<!-- Definition of the model Auditoria-->
-					<div class="modal fade" id="myModalAudito" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-					  <div class="modal-dialog">
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					        <h4 class="modal-title" id="myModalLabel">{{ventanaTitulo}}</h4>
-					      </div>
-					      <div class="modal-body">
-					        <form name="formInsert" class="form-horizontal" role="form">
-					        	
-				  			</form>
-					      </div>
-					      <div class="modal-footer">
-					        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-					      </div>
-					    </div>
-					  </div>
-					</div>  
-			    </tab>
+			    </tab>			    
 			    <tab heading="{{ventanaTitulo}}" ng-controller="FmtEstadoController" ng-click="fixGridRendering()">
 			      	<h3>{{ventanaTitulo}}&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalEstado"> Ver <span class="glyphicon glyphicon-eye-open"> </span></button></h3>	                
-	      			<div class="gridStyle" ng-grid="gridOptions"></div>
+	      			<custom-grid cols="columnDefs" selected-items="selectedItems" custom-options="gridOptions" evento="gridEvento" data-ng-if="directiveGrid"></custom-grid>
 	      			
 	      			<!-- Definition of the model Estado-->
 					<div class="modal fade" id="myModalEstado" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -119,7 +95,36 @@
 					      </div>
 					      <div class="modal-body">
 					        <form name="formInsert" class="form-horizontal" role="form">
-					        							
+					        	<div class="form-group">
+									<label for="estacons" class="col-sm-2 control-label">{{ whatClassIsIt("estacons") }}</label>
+									<div class="col-sm-10">
+										<input type="number" name ="estacons" id="estacons" style="width:100%;" data-ng-model="estacons" value="{{estacons}}" readonly="readonly">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="estafore" class="col-sm-2 control-label">{{ whatClassIsIt("estafore") }}</label>
+									<div class="col-sm-10">
+										<input type="number" name ="estafore" id="estafore" style="width:100%;" data-ng-model="estafore" value="{{estafore}}" readonly="readonly">
+									</div>
+								</div>
+								<div class="form-group" >
+			            		  	  <label for="estafech" class="col-sm-2 control-label">{{ whatClassIsIt("estafech") }}</label>
+									  <div class="col-sm-10">			
+										<input style="width:100%;" type="text" data-ng-model="estafech" readonly/>
+									  </div>							  
+				            	</div>			            	
+								<div class="form-group">
+									<label for="mofouser" class="col-sm-2 control-label">{{ whatClassIsIt("mofouser") }}</label>
+									<div class="col-sm-10">
+										<input style="width:100%;" type="text" name ="estauser" id="estauser" data-ng-model="estauser" readonly="readonly">
+									</div>
+								</div>
+								<div class="form-group" >
+				            		  <label for="estaesta" class="col-sm-2 control-label">{{ whatClassIsIt("estaesta") }}</label>
+									  <div class="col-sm-10">			
+										<select class="form-control" name ="estaesta" id="estaesta" data-ng-model="estaesta" data-ng-options="opt.value as opt.label for opt in optionsEstado"></select>
+									  </div>							  
+				            	</div> 							
 				  			</form>
 					      </div>
 					      <div class="modal-footer">
@@ -129,7 +134,66 @@
 					  </div>
 					</div>  
 			    </tab>
-			</tabset>      			
+			    <tab heading="{{ventanaTitulo}}" ng-controller="PilMotiformController" ng-click="fixGridRendering()">
+			      	<h3>{{ventanaTitulo}}&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalMotiform"> Ver <span class="glyphicon glyphicon-eye-open"> </span></button></h3>	                
+	      			<custom-grid cols="columnDefs" selected-items="selectedItems" custom-options="gridOptions" evento="gridEvento" data-ng-if="directiveGrid"></custom-grid>
+	      			
+	      			<!-- Definition of the model Estado-->
+					<div class="modal fade" id="myModalMotiform" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					        <h4 class="modal-title" id="myModalLabel">{{ventanaTitulo}}</h4>
+					      </div>
+					      <div class="modal-body">
+					        <form name="formInsert" class="form-horizontal" role="form">
+					        	<div class="form-group">
+									<label for="mofocons" class="col-sm-2 control-label">{{ whatClassIsIt("mofocons") }}</label>
+									<div class="col-sm-10">
+										<input type="number" name ="mofocons" id="mofocons" style="width:100%;" data-ng-model="mofocons" value="{{mofocons}}" readonly="readonly">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="mofofore" class="col-sm-2 control-label">{{ whatClassIsIt("mofofore") }}</label>
+									<div class="col-sm-10">
+										<input type="number" name ="mofofore" id="mofofore" style="width:100%;" data-ng-model="mofofore" value="{{mofofore}}" readonly="readonly">
+									</div>
+								</div>
+								<div class="form-group" >
+				            		  <label for="mofodevo" class="col-sm-2 control-label">{{ whatClassIsIt("mofodevo") }}</label>
+									  <div class="col-sm-10">			
+										<select class="form-control" name ="mofodevo" id="mofodevo" data-ng-model="mofodevo" data-ng-options="opt.value as opt.label for opt in optionsMotivo"></select>
+									  </div>							  
+				            	</div>
+				            	<div class="form-group" >
+			            		  	  <label for="mofodesc" class="col-sm-2 control-label">{{ whatClassIsIt("mofodesc") }}</label>
+									  <div class="col-sm-10">			
+										<textarea style="width:100%;" name ="mofodesc" id="mofodesc" ng-model="mofodesc" ng-trim="false"></textarea>
+									  </div>							  
+				            	</div>
+				            	<div class="form-group" >
+			            		  	  <label for="mofofech" class="col-sm-2 control-label">{{ whatClassIsIt("mofofech") }}</label>
+									  <div class="col-sm-10">			
+										<input style="width:100%;" type="text" ng-model="mofofech" readonly/>
+									  </div>							  
+				            	</div>			            	
+								<div class="form-group">
+									<label for="mofouser" class="col-sm-2 control-label">{{ whatClassIsIt("mofouser") }}</label>
+									<div class="col-sm-10">
+										<input style="width:100%;" type="text" name ="mofouser" id="mofouser" data-ng-model="mofouser" readonly="readonly">
+									</div>
+								</div>							
+				  			</form>
+					      </div>
+					      <div class="modal-footer">
+					        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>				       
+					      </div>
+					    </div>
+					  </div>
+					</div>  
+			    </tab>
+			</tabset>   			
         </div>	    	       
     </div>
 </sec:authorize>      

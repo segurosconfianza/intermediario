@@ -87,6 +87,7 @@
 	    <script  src="WebResources/pila/Adjunto/FmtAdjuntoController.js"></script>
 	    <script  src="WebResources/pila/Auditoria/FmtAuditoriaController.js"></script>
 	    <script  src="WebResources/pila/Estado/FmtEstadoController.js"></script> 
+	    <script  src="WebResources/pila/pilmotiform/PilMotiformController.js"></script>
 	    
 		<script type="text/javascript" Language="JavaScript">
 			document.createElement('ng-view');				    
