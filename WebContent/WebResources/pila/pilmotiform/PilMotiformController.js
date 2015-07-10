@@ -100,11 +100,15 @@ FrmMainApp.controller('PilMotiformController', ['$scope', 'PlanillaService',func
 			
 			Service.getDataMotiform($scope.pageSize, $scope.currentPage, $scope.order, $scope.searchQuery).then(function(dataResponse) {
 	    		if(dataResponse.data.error!=undefined)
-	    			alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    			$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 	        	else 
 	        		$scope.$broadcast('loadDataGrid',dataResponse.data.data, dataResponse.data.count, $scope.pageSize, $scope.currentPage);
 	        });
 		}
-	}			
+	}
+	
+	$scope.sendAlert = function(error){
+		$scope.$broadcast('loadDataError', error);
+	}
 }            
 ])

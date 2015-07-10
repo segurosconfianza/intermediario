@@ -43,6 +43,7 @@
 		    </div>
 		  </div>
 		</div>
+    	<custom-alert name-modal="myModalError" label-error="Ninguno"></custom-alert>
     	
         <!-- Nested list template -->
 	    <script type="text/ng-template" id="form_renderer.jsp">  
@@ -79,7 +80,7 @@
 						<button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Cargando...</button>
 					</div>	                
       				<object data="{{content}}" style="width:100%;height:100%;"></object>
-      				
+      				<custom-alert name-modal="myModalErrorAdjunto" label-error="Ninguno"></custom-alert>
 			    </tab>			    
 			    <tab heading="{{ventanaTitulo}}" ng-controller="FmtEstadoController" ng-click="fixGridRendering()">
 			      	<h3>{{ventanaTitulo}}&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalEstado"> Ver <span class="glyphicon glyphicon-eye-open"> </span></button></h3>	                
@@ -133,6 +134,7 @@
 					    </div>
 					  </div>
 					</div>  
+					<custom-alert name-modal="myModalErrorEstado" label-error="Ninguno"></custom-alert>
 			    </tab>
 			    <tab heading="{{ventanaTitulo}}" ng-controller="PilMotiformController" ng-click="fixGridRendering()">
 			      	<h3>{{ventanaTitulo}}&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalMotiform"> Ver <span class="glyphicon glyphicon-eye-open"> </span></button></h3>	                
@@ -191,7 +193,8 @@
 					      </div>
 					    </div>
 					  </div>
-					</div>  
+					</div>
+					<custom-alert name-modal="myModalErrorPilMoti" label-error="Ninguno"></custom-alert>  
 			    </tab>
 			</tabset>   			
         </div>	    	       

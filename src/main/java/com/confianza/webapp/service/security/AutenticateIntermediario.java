@@ -59,7 +59,7 @@ public class AutenticateIntermediario implements AuthenticationProvider {
     {		
     	try{
     			
-		String urlu = "http://192.168.60.231:8080/IConfianza/confianza/Intermediario/validateUsua.json?user="+user+"&password="+password;		
+		String urlu = "http://192.168.100.202:8080/IConfianza/confianza/Intermediario/validateUsua.json?user="+user+"&password="+password;		
 		
 		URL url = new URL(urlu);
 		

@@ -34,7 +34,7 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 		
 		Service.loadData().then(function(dataResponse) {  
 			if(dataResponse.data.error!=undefined)
-	    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+				$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 	    	else{
 	    		$scope.title=dataResponse.data.titulo;
 	    		$scope.description=dataResponse.data.descri;
@@ -42,7 +42,7 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	    		
 	    		Service.getTbtablas('foreesta').then(function(dataResponse) {  
 	    			if(dataResponse.data.error!=undefined)
-	    	    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    				$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 	    	    	else{
 	    	    		$scope.tbforeesta=dataResponse.data;
 	    	    		$scope.iconForeesta={};	
@@ -54,7 +54,7 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	    	    		Service.getParams($scope.version).then(function(dataResponse) {  
 	    	    	    	
 	    	    	    	if(dataResponse.data.error!=undefined)
-	    	    	    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    	    	    		$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 	    	    	    	else{
 	    	    	    		
 	    	    	    		$scope.columns=dataResponse.data.data;
@@ -64,13 +64,13 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	    	    	    		columns[2]={field: "foreesta", displayName: getName(Service.getI18n(), "foreesta"), visible: false};
 	    	    	    		columns[3]={field: "tablvast", displayName: getName(Service.getI18n(), "foreesta"), headerCellTemplate: filterText, cellTemplate: '<div><img src="{{icons[row.getProperty(col.field)]}}" width="20" height="20"></img>{{row.getProperty(col.field)}}</div>' };
 	    	    	    		//recorro los campos para cargar los data de los combos
-	    	    	    		for(i=0; i<$scope.columns.length;i++){    				    	    	    		
-	    	    	    			//si el tipo de dato es columna
-	    	    	    			if($scope.columns[i].camptipo=='CS' || $scope.columns[i].camptipo=='CI'){    				    				    				
+	    	    	    		angular.forEach($scope.columns, function(reg, index) {
+			    	    			//si el tipo de dato es columna
+	    	    	    			if(reg.camptipo=='CS' || reg.camptipo=='CI'){    				    				    				
 	    	    	    				//se pasa el codigo del combo
-	    	    	    				Service.getCombo($scope.columns[i].campcomb).then(function(dataResponse) {    					    					
+	    	    	    				Service.getCombo(reg.campcomb).then(function(dataResponse) {    					    					
 	    	    	    					if(dataResponse.data.error!=undefined)
-	    	    	    			    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    	    	    						$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 	    	    	    			    	else{    			   
 	    	    	    			    		//se carga la data en los options
 	    	    	    			    		$scope.options[dataResponse.data.combo] = dataResponse.data.data;      			    		
@@ -78,15 +78,15 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	    	    	    				});    				    				 		    				    		
 	    	    	    			}
 	    	    	    			
-	    	    	    			if($scope.columns[i].camptipo=="D" || $scope.columns[i].camptipo=="T")
-	    	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenDate};
-	    	    	    			else if($scope.columns[i].camptipo=="O" || $scope.columns[i].camptipo=="I" || $scope.columns[i].camptipo=="L" || $scope.columns[i].camptipo=="F")
-	    	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenNumber, cellTemplate:'<div>{{row.getProperty(col.field) | number}}</div>'};
-	    	    	    			else if($scope.columns[i].camptipo=="B")
-	    	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenNumber};
+	    	    	    			if(reg.camptipo=="D" || reg.camptipo=="T")
+	    	    	    				columns[index+4]={field: reg.campnomb, displayName: reg.camplabe, headerCellTemplate: filterBetweenDate};
+	    	    	    			else if(reg.camptipo=="O" || reg.camptipo=="I" || reg.camptipo=="L" || reg.camptipo=="F")
+	    	    	    				columns[index+4]={field: reg.campnomb, displayName: reg.camplabe, headerCellTemplate: filterBetweenNumber, cellTemplate:'<div>{{row.getProperty(col.field) | number}}</div>'};
+	    	    	    			else if(reg.camptipo=="B")
+	    	    	    				columns[index+4]={field: reg.campnomb, displayName: reg.camplabe, headerCellTemplate: filterBetweenNumber};
 	    	    	    			else
-	    	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterText};
-	    	    	    		}
+	    	    	    				columns[index+4]={field: reg.campnomb, displayName: reg.camplabe, headerCellTemplate: filterText};
+			    	        	});	
 	    	    	    		
 	    	    	    		$scope.columnDefs=columns;	
 	    	    	    		$scope.directiveGrid=true;
@@ -104,14 +104,13 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
     	sortInfo:{ fields: ['forecons'], directions: ['desc']},
     	selectedItems: [],
         afterSelectionChange: function (rowItem, event) {
-        	for(i=0; i<$scope.columns.length;i++){            		
-        		if($scope.columns[i].camptipo=='O' || $scope.columns[i].camptipo=='F')
-        			$scope.Campos[$scope.columns[i].campnomb]=parseFloat(rowItem.entity[$scope.columns[i].campnomb]);
-        		else if($scope.columns[i].camptipo=='I' || $scope.columns[i].camptipo=='L')
-        			$scope.Campos[$scope.columns[i].campnomb]=parseInt(rowItem.entity[$scope.columns[i].campnomb]);
+        	angular.forEach($scope.columns, function(reg) {
+        		if(reg.camptipo=='O' || reg.camptipo=='F')
+        			$scope.Campos[reg.campnomb]=parseFloat(rowItem.entity[reg.campnomb].toString(),20);
         		else
-        			$scope.Campos[$scope.columns[i].campnomb]=rowItem.entity[$scope.columns[i].campnomb];
-        	}
+        			$scope.Campos[reg.campnomb]=rowItem.entity[reg.campnomb];
+        	});
+        	
         	$scope.Campos["forecons"]=rowItem.entity["forecons"];
         	
         	Service.prepForLoad(rowItem.entity.forecons);      
@@ -150,9 +149,9 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	    $scope.buttonNew=true;
 		$scope.buttonEdit=false;
 		
-		for(i=0; i<$scope.columns.length;i++){
-    		$scope.Campos[$scope.columns[i].campnomb]="";
-    	}
+		angular.forEach($scope.columns, function(reg) {
+    		$scope.Campos[reg.campnomb]="";
+    	});
     }                
     
 	$scope.loadDatatoForm= function(){			
@@ -161,82 +160,53 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 			$scope.buttonEdit=true;
 		}
 		else
-			alert("Favor seleccione una fila");
+			$scope.sendAlert("Favor seleccione una fila");
     }
 	
 	$scope.insertRecord= function(file){			
 		
 		var verify=true;		
 		$scope.camposSendData={};	
-		
-		for(i=0; i<$scope.columns.length;i++){
-			//Tomar solo los datos de salida para enviarlos a la consulta
-			if($scope.Campos[$scope.columns[i].campnomb]==undefined){
-				$scope.camposSendData[$scope.columns[i].campnomb]=null;
-			}
-			else if($scope.columns[i].camptipo=='D'){//date
-				if(typeof $scope.Campos[$scope.columns[i].campnomb]=="string"){
-					//console.log("string");
-					$scope.camposSendData[$scope.columns[i].campnomb]=$scope.Campos[$scope.columns[i].campnomb];
-				}
-				else{
-					//console.log("no string");
-					$scope.camposSendData[$scope.columns[i].campnomb]=$filter('date')(new Date($scope.Campos[$scope.columns[i].campnomb]), 'dd/MM/yyyy');
-				}
-			} else if($scope.columns[i].camptipo=='T'){//timestamp
-				if(typeof $scope.Campos[$scope.columns[i].campnomb]=="string"){
-					//console.log("string");
-					$scope.camposSendData[$scope.columns[i].campnomb]=$scope.Campos[$scope.columns[i].campnomb];
-				}
-				else{
-					//console.log("no string");
-					$scope.camposSendData[$scope.columns[i].campnomb]=$filter('date')(new Date($scope.Campos[$scope.columns[i].campnomb]), 'dd/MM/yyyy HH:mm:ss');
-				}
-			} else	{
-				$scope.camposSendData[$scope.columns[i].campnomb]=$scope.Campos[$scope.columns[i].campnomb];
-			}
+				
+		if(!$scope.validatePeriod()){
+			verify=false;
+			$scope.sendAlert("El año y el mes que reporta no puede ser superior al actual");
 		}
-		
 		//validar si subieron adjuntos
-		if(file==undefined || file.length<1){
-			alert("Datos vacios o incorrectos: Favor adjunte el/los archivo(s) de soporte");
+		else if(file==undefined || file.length<1){
+			$scope.sendAlert("Datos vacios o incorrectos: Favor adjunte el/los archivo(s) de soporte");
 			verify=false;			
 		}	
 		//validar si subieron solo 1 adjunto
 		else if(file.length>1){
-			alert("Solo puede adjuntar un archivo PDF");
+			$scope.sendAlert("Solo puede adjuntar un archivo PDF");
 			verify=false;			
 		}	
 		//validar si subieron solo 1 adjunto tipo pdf
 		else if(file.length==1){
-			for(i=0;i<file.length;i++){
-				if(!(file[i].type=="application/pdf")){
-					alert("Solo puede adjuntar un archivo PDF");
+			angular.forEach(file, function(reg) {
+				if(!(reg.type=="application/pdf")){
+					$scope.sendAlert("Solo puede adjuntar un archivo PDF");
 					verify=false;
 				}
-			}
-						
+			});
 		}
 		
-		if(verify){		
-						
+		if(verify && $scope.prepareSendData()){		
 			formData=new FormData();
-			for(i=0;i<file.length;i++){				
-				formData.append("file", file[i]);
-			}
+			
+			angular.forEach(file, function(reg) {
+				formData.append("file", reg);	
+	    	});
 			
 			formData.append("paramsData", angular.toJson($scope.camposSendData));
 						
 			Service.insertRecord(formData, $scope.version, $scope.intermediarioUser).then(function(dataResponse) {
-				 	      
-        		alert(dataResponse.data);	        				        			
-	        	
-        		$scope.createRecordForm();
-        		
+				 	
+				$scope.sendAlert(dataResponse.data);
+				$('#myModalNew').modal('hide');
         		$scope.loadMyGrid();
 	        }); 						
-		}else{ 
-			alert("Datos vacios o incorrectos: Favor diligencie todos los campos");
 		}
     }
 	
@@ -245,60 +215,30 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 		var verify=true;		
 		$scope.camposSendData={};	
 		
-		for(i=0; i<$scope.columns.length;i++){
-			//Verificar si los datos requeridos cumplen con haber sido digitados
-			if($scope.Campos[$scope.columns[i].camprequ]==1 && ($scope.Campos[$scope.columns[i].campnomb]==undefined || $scope.Campos[$scope.columns[i].campnomb]=='') && $scope.Campos[$scope.columns[i].campnomb]!=0){
-				verify=false;
-				break;
-			}
-			
-			//Tomar solo los datos de salida para enviarlos a la consulta
-			if($scope.Campos[$scope.columns[i].campnomb]==undefined){
-				$scope.camposSendData[$scope.columns[i].campnomb]=null;
-			}
-			else if($scope.columns[i].camptipo=='D'){//date
-				if(typeof $scope.Campos[$scope.columns[i].campnomb]=="string"){
-					//console.log("string");
-					$scope.camposSendData[$scope.columns[i].campnomb]=$scope.Campos[$scope.columns[i].campnomb];
-				}
-				else{
-					//console.log("no string");
-					$scope.camposSendData[$scope.columns[i].campnomb]=$filter('date')(new Date($scope.Campos[$scope.columns[i].campnomb]), 'dd/MM/yyyy');
-				}
-			} else if($scope.columns[i].camptipo=='T'){//timestamp
-				if(typeof $scope.Campos[$scope.columns[i].campnomb]=="string"){
-					//console.log("string");
-					$scope.camposSendData[$scope.columns[i].campnomb]=$scope.Campos[$scope.columns[i].campnomb];
-				}
-				else{
-					//console.log("no string");
-					$scope.camposSendData[$scope.columns[i].campnomb]=$filter('date')(new Date($scope.Campos[$scope.columns[i].campnomb]), 'dd/MM/yyyy HH:mm:ss');
-				}
-			} else	{
-				$scope.camposSendData[$scope.columns[i].campnomb]=$scope.Campos[$scope.columns[i].campnomb];
-			}
+		if(!$scope.validatePeriod()){
+			verify=false;
+			$scope.sendAlert("El año y el mes que reporta no puede ser superior al actual");
 		}
 		
-			
-		if(verify){		
+		if(verify&& $scope.prepareSendData()){	
 			formData=new FormData();
-			for(i=0;i<file.length;i++){
-				formData.append("file", file[i]);				
-			}
+			
+			angular.forEach(file, function(reg) {
+				formData.append("file", reg);				
+			});
 			
 			formData.append("paramsData", angular.toJson($scope.camposSendData));
 						
 			Service.updateRecord(formData, $scope.Campos["forecons"], $scope.intermediarioUser, $scope.version).then(function(dataResponse) {
 				 	
 				if(dataResponse.data.error!=undefined)
-		    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+					$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 		    	else{
 		    		$scope.loadMyGrid();
-		    		alert(dataResponse.data);	  
+		    		
+		    		$scope.sendAlert(dataResponse.data);
 		    	}				        		      				        				        	        
 	        }); 						
-		}else{ 
-			alert("Datos vacios o incorrectos: Favor diligencie todos los campos");
 		}
     }
 		
@@ -316,10 +256,77 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 		
 		Service.getData($scope.columns, $scope.version, $scope.intermediarioUser, $scope.pageSize, $scope.currentPage, $scope.order, $scope.searchQuery.concat($scope.basicSearchQuery)).then(function(dataResponse) {
     		if(dataResponse.data.error!=undefined)
-    			alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+    			$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
         	else 
         		$scope.$broadcast('loadDataGrid',dataResponse.data.data, dataResponse.data.count, $scope.pageSize, $scope.currentPage);
         });
+	}
+	
+	$scope.sendAlert = function(error){
+		$scope.$broadcast('loadDataError', error);
+	}
+	
+	$scope.validatePeriod = function(){
+		var myDate = new Date();
+		var actualMonth=myDate.getMonth()+1;
+		var actualYear=myDate.getFullYear();
+		var userYear=parseInt($scope.Campos['anio']);
+		
+		switch($scope.Campos['mes']){
+				case "Enero":  	if(1<=actualMonth && userYear<=actualYear)
+							   	return true;	
+				case "Febrero":	if(2<=actualMonth && userYear<=actualYear)
+							   	return true;	
+				case "Marzo":  	if(3<=actualMonth && userYear<=actualYear)
+							   	return true;	
+				case "Abril":	if(4<=actualMonth && userYear<=actualYear)
+								return true;
+				case "Mayo":	if(5<=actualMonth && userYear<=actualYear)
+								return true;
+				case "Junio":	if(6<=actualMonth && userYear<=actualYear)
+								return true;
+				case "Julio":	if(7<=actualMonth && userYear<=actualYear)
+								return true;
+				case "Agosto":	if(8<=actualMonth && userYear<=actualYear)
+							  	return true;
+				case "Septiembre":if(9<=actualMonth && userYear<=actualYear)
+								return true;
+				case "Octubre":	if(10<=actualMonth && userYear<=actualYear)
+								return true;
+				case "Noviembre":if(11<=actualMonth && userYear<=actualYear)
+								return true;
+				case "Diciembre":if(12<=actualMonth && userYear<=actualYear)
+								return true;
+		}
+		return false;
+	}
+	
+	$scope.prepareSendData = function(){
+		angular.forEach($scope.columns, function(reg) {
+			//Verificar si los datos requeridos cumplen con haber sido digitados
+			if($scope.Campos[reg.camprequ]==1 && ($scope.Campos[reg.campnomb]==undefined || $scope.Campos[reg.campnomb]=='') && $scope.Campos[reg.campnomb]!=0){
+				$scope.sendAlert("Faltan datos por diligenciar");
+				return false;
+			}
+			
+			//Tomar solo los datos de salida para enviarlos a la consulta
+			if($scope.Campos[reg.campnomb]==undefined)
+				$scope.camposSendData[reg.campnomb]=null;
+			else if(reg.camptipo=='D')//date
+				if(typeof $scope.Campos[reg.campnomb]=="string")
+					$scope.camposSendData[reg.campnomb]=$scope.Campos[reg.campnomb];
+				else
+					$scope.camposSendData[reg.campnomb]=$filter('date')(new Date($scope.Campos[reg.campnomb]), 'dd/MM/yyyy');
+			else if(reg.camptipo=='T')//timestamp
+				if(typeof $scope.Campos[reg.campnomb]=="string")
+					$scope.camposSendData[reg.campnomb]=$scope.Campos[reg.campnomb];
+				else
+					$scope.camposSendData[reg.campnomb]=$filter('date')(new Date($scope.Campos[reg.campnomb]), 'dd/MM/yyyy HH:mm:ss');
+			else	
+				$scope.camposSendData[reg.campnomb]=$scope.Campos[reg.campnomb];
+			
+		});
+		return true;
 	}
  }            
 ]);

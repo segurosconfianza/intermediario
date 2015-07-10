@@ -1,7 +1,7 @@
 FrmMainApp.controller('FrmMenuController', ['$scope', 'FrmMenuService', '$sce', function ($scope, FrmMenuService, $sce) {
 	    	$scope.oneAtATime = false;
 	    	$scope.iframeView = false;
-	    	$scope.angularView = false;
+	    	$scope.angularView = true;
 	    	$scope.iframeUrl  = "";
 	    	
 	    	FrmMenuService.getData().then(function(dataResponse) {

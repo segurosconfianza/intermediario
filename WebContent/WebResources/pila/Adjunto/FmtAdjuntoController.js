@@ -5,17 +5,18 @@ FrmMainApp.controller('FmtAdjuntoController', ['$scope', '$modal', 'PlanillaServ
 	$scope.showModal = false;
 	$scope.loadPdf=false;
 	
-	$scope.ventanaTitulo=getName(PlanillaService.getI18n(), "-", "FMT_ADJUNTO");
+	$scope.$on('handleBroadcastAuditoriaI18n', function() {
+		
+		$scope.ventanaTitulo=getName(PlanillaService.getI18n(), "-", "FMT_ADJUNTO");
+    });
 	
 	$scope.$on('handleBroadcastAdjunto', function() {
 		
 		$scope.loadPdf=true;
 		
 		PlanillaService.getDataAdjunto(PlanillaService.id).then(function(dataResponse) {   	        	
-			if(dataResponse.data.error!=undefined){
-	        	alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
-	        	$scope.loadPdf=false;
-        	}
+			if(dataResponse.data.error!=undefined)
+				$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
         	else{ 
     			var file = new Blob([dataResponse.data], {type: 'application/pdf'});
     		    var fileURL = URL.createObjectURL(file);
@@ -40,5 +41,9 @@ FrmMainApp.controller('FmtAdjuntoController', ['$scope', '$modal', 'PlanillaServ
     		return log[0].etinetiq;
     	return "";
     }
+    
+    $scope.sendAlert = function(error){
+		$scope.$broadcast('loadDataError', error);
+	}
   }            
 ])

@@ -9,7 +9,10 @@ FrmMainApp.config(['$routeProvider',
   	      },
   	      controller: 'PlanillaController'
   	    }).	  
-   	    otherwise({
-   	      
-   	    });
+  	  otherwise({
+ 	    	templateUrl: function(params) {
+  	          return  INTERMEDIARIO_WEB_SERVER+'Intermediario/defaultView'; 
+  	          
+  	      },
+ 	    });
 }]);

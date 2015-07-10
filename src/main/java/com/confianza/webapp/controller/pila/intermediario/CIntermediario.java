@@ -47,4 +47,9 @@ public class CIntermediario {
 		auth = SecurityContextHolder.getContext().getAuthentication();
 		return gson.toJson(auth.getName());
 	}
+	
+	@RequestMapping("/defaultView")
+	public String defaul() {
+		return "default";
+	}
 }

@@ -10,9 +10,11 @@
 
 #encabezado{ height:  9%; width: 100%; top: 0px; left: 0px; position: absolute}
 
-#pie       { height: 16%; width: 100%; left: 0px;  position: relative; margin-top: 25%;padding:5px 0px; clear: both;}
+#contenido { height: 75%; width: 80% ; margin-left: 20%; margin-top:100px; margin-bottom: auto; height: auto; min-height:100%;}
 
-#contenido { height: 75%; width: 80% ; margin-left: 20%; margin-top:100px; position: relative}
+#contenido:after{ width: 100%; height:150px; display:block; clear:both; }
+
+#pie       { height: 16%; width: 100%; left: 0px;  padding:5px 0px; clear: both; }
 
 #menu      { height: 75%; width: 18% ; margin-top:100px; position: absolute}		
 

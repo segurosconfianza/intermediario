@@ -114,7 +114,7 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
     this.getDataMotiform = function(pageSize, page, order, filter) { 
 		return $http({
 			method: 'GET', 
-	        url: WEB_SERVER+'PilMotiform/listAll.json',
+	        url: WEB_SERVER+'Intermediario/PilMotiform/listAll.json',
 	        params: { pageSize: pageSize, page: page, order: order, filter: filter},
 	     });
     } 
@@ -122,7 +122,7 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
     this.getDataAuditoria = function(pageSize, page, order, filter) {  		
 		return $http({
 	        method: 'GET',
-	        url: WEB_SERVER+'FmtAuditoria/listAll.json',
+	        url: WEB_SERVER+'Intermediario/FmtAuditoria/listAll.json',
 	        params: {pageSize: pageSize, page: page, order: order, filter: filter }
 	     });		
 	 }
@@ -130,7 +130,7 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
     this.getDataEstado = function(pageSize, page, order, filter) {  		
 		return $http({
 	        method: 'GET',
-	        url: WEB_SERVER+'FmtEstado/listAll.json',
+	        url: WEB_SERVER+'Intermediario/FmtEstado/listAll.json',
 	        params: {pageSize: pageSize, page: page, order: order, filter: filter}
 	     });
 	 }
@@ -151,7 +151,7 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
     this.getMotivos = function() {    		    		
 		return $http({
 	        method: 'GET',
-	        url:  WEB_SERVER+'PilMotivo/listAll.json', 
+	        url:  WEB_SERVER+'Intermediario/PilMotivo/listAll.json', 
 	        params: {pageSize: 0, page: 0}
 	     });
 	 } 

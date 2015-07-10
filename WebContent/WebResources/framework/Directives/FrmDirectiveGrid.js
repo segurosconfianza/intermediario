@@ -2,7 +2,7 @@ FrmMainApp.directive('customGrid', function($compile) {
 
 	  return {
 	    restrict: 'E',
-	    template: '<div class="gridStyle" ng-grid="gridOptions"></div>',
+	    template: '<div class="gridStyle" ng-grid="gridOptions" style="width: 100%"></div>',
 	    scope : { cols : '=', selectedItems : '=', customOptions : '=', evento : '@', eventoGrid : '@', icons : '='}, 
 	    replace : false,
 	    transclude : false,

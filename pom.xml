@@ -215,6 +215,16 @@
 			<version>3.3.3</version>
 			<type>pom</type>
 		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>mailapi</artifactId>
+			<version>1.5.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>mailapi</artifactId>
+			<version>1.5.4</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<!-- Maven will append the version to the finalName (which is the name 
