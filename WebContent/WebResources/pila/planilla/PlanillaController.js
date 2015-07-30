@@ -101,7 +101,7 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	}
 	
     $scope.gridOptions = {  
-    	sortInfo:{ fields: ['forecons'], directions: ['desc']},
+    	sortInfo:{ fields: ['foreesta'], directions: ['desc']}, 
     	selectedItems: [],
         afterSelectionChange: function (rowItem, event) {
         	angular.forEach($scope.columns, function(reg) {
@@ -148,6 +148,7 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
    $scope.createRecordForm= function(){
 	    $scope.buttonNew=true;
 		$scope.buttonEdit=false;
+		$scope.picFile="";
 		
 		angular.forEach($scope.columns, function(reg) {
     		$scope.Campos[reg.campnomb]="";
@@ -206,6 +207,9 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 				$scope.sendAlert(dataResponse.data);
 				$('#myModalNew').modal('hide');
         		$scope.loadMyGrid();
+        		Service.prepForLoad(dataResponse.data.split(':')[1]); 
+        		Service.loadChildren().then(function(dataResponse) {
+        		});
 	        }); 						
 		}
     }
@@ -218,6 +222,19 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 		if(!$scope.validatePeriod()){
 			verify=false;
 			$scope.sendAlert("El año y el mes que reporta no puede ser superior al actual");
+		}
+		//validar si subieron solo 1 adjunto tipo pdf
+		if(file!=undefined && file.length>1){
+			$scope.sendAlert("Solo puede adjuntar un archivo PDF");
+			verify=false;			
+		}	
+		if(file!=undefined && file.length==1){
+			angular.forEach(file, function(reg) {
+				if(!(reg.type=="application/pdf")){
+					$scope.sendAlert("Solo puede adjuntar un archivo PDF");
+					verify=false;
+				}
+			});
 		}
 		
 		if(verify&& $scope.prepareSendData()){	
@@ -234,9 +251,9 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 				if(dataResponse.data.error!=undefined)
 					$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 		    	else{
-		    		$scope.loadMyGrid();
-		    		
 		    		$scope.sendAlert(dataResponse.data);
+		    		$('#myModalNew').modal('hide');
+	        		$scope.loadMyGrid(); 
 		    	}				        		      				        				        	        
 	        }); 						
 		}
@@ -247,6 +264,8 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 		$scope.currentPage=currentPage;
 		$scope.order=order;
 		$scope.searchQuery=searchQuery;
+		if($scope.searchQuery==undefined)
+			$scope.searchQuery=[];
 		
     	if($scope.directiveGrid)
     		$scope.loadMyGrid();
@@ -302,11 +321,15 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	}
 	
 	$scope.prepareSendData = function(){
+		var result=true;
+		
 		angular.forEach($scope.columns, function(reg) {
 			//Verificar si los datos requeridos cumplen con haber sido digitados
-			if($scope.Campos[reg.camprequ]==1 && ($scope.Campos[reg.campnomb]==undefined || $scope.Campos[reg.campnomb]=='') && $scope.Campos[reg.campnomb]!=0){
-				$scope.sendAlert("Faltan datos por diligenciar");
-				return false;
+			if(reg.camprequ=='1'){
+				if(!formInsert.$valid && ($scope.Campos[reg.campnomb]==undefined || $scope.Campos[reg.campnomb]=='' || ($scope.Campos[reg.campnomb])==' ')){
+					$scope.sendAlert("Faltan datos por diligenciar");
+					result=false;
+				}	
 			}
 			
 			//Tomar solo los datos de salida para enviarlos a la consulta
@@ -326,7 +349,7 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 				$scope.camposSendData[reg.campnomb]=$scope.Campos[reg.campnomb];
 			
 		});
-		return true;
+		return result;
 	}
  }            
 ]);

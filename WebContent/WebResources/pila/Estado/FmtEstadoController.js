@@ -81,6 +81,8 @@ FrmMainApp.controller('FmtEstadoController', ['$scope', 'PlanillaService',functi
 		$scope.currentPage=currentPage;
 		$scope.order=order;
 		$scope.searchQuery=searchQuery;
+		if($scope.searchQuery==undefined)
+			$scope.searchQuery=[];
 		
     	if($scope.directiveGrid)
     		$scope.loadMyGrid();

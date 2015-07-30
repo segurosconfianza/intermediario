@@ -10,17 +10,17 @@
 		<right_margin>30</right_margin>
 	</page_setting>
 	<category_index>0</category_index>
-	<zoom>1.0</zoom>
+	<zoom>0.75</zoom>
 	<x>0</x>
-	<y>212</y>
+	<y>0</y>
 	<default_color>
-		<r>128</r>
-		<g>128</g>
+		<r>255</r>
+		<g>255</g>
 		<b>255</b>
 	</default_color>
 	<color>
-		<r>128</r>
-		<g>128</g>
+		<r>255</r>
+		<g>255</g>
 		<b>255</b>
 	</color>
 	<font_name>Segoe UI</font_name>
@@ -89,7 +89,7 @@
 				<is_open_after_saved>true</is_open_after_saved>
 			</export_html_setting>
 			<export_image_setting>
-				<output_file_path></output_file_path>
+				<output_file_path>D:\Desktop\Pila.png</output_file_path>
 				<category_dir_path></category_dir_path>
 				<with_category_image>true</with_category_image>
 				<is_open_after_saved>true</is_open_after_saved>
@@ -196,7 +196,7 @@
 			</connections>
 			<display>false</display>
 			<creation_date>2015-05-19 15:22:27</creation_date>
-			<updated_date>2015-06-23 15:46:09</updated_date>
+			<updated_date>2015-07-21 12:08:41</updated_date>
 			<model_property>
 				<name>Project Name</name>
 				<value></value>
@@ -1700,28 +1700,6 @@
 			<connections>
 				<relation>
 					<id>2</id>
-					<source>0</source>
-					<target>4</target>
-						<source_xp>-1</source_xp>
-						<source_yp>-1</source_yp>
-						<target_xp>-1</target_xp>
-						<target_yp>-1</target_yp>
-						<color>
-							<r>0</r>
-							<g>0</g>
-							<b>0</b>
-						</color>
-					<child_cardinality>1..n</child_cardinality>
-					<parent_cardinality>1</parent_cardinality>
-					<reference_for_pk>true</reference_for_pk>
-					<name>FMT_FORMREGI_PILA_MOTIFORM_PK</name>
-					<on_delete_action>RESTRICT</on_delete_action>
-					<on_update_action>RESTRICT</on_update_action>
-					<referenced_column>null</referenced_column>
-					<referenced_complex_unique_key>null</referenced_complex_unique_key>
-				</relation>
-				<relation>
-					<id>3</id>
 					<source>5</source>
 					<target>4</target>
 						<source_xp>-1</source_xp>
@@ -1737,6 +1715,28 @@
 					<parent_cardinality>1</parent_cardinality>
 					<reference_for_pk>true</reference_for_pk>
 					<name>PILA_MOTIVO_PILA_MOTIFORM_FK</name>
+					<on_delete_action>RESTRICT</on_delete_action>
+					<on_update_action>RESTRICT</on_update_action>
+					<referenced_column>null</referenced_column>
+					<referenced_complex_unique_key>null</referenced_complex_unique_key>
+				</relation>
+				<relation>
+					<id>3</id>
+					<source>0</source>
+					<target>4</target>
+						<source_xp>-1</source_xp>
+						<source_yp>-1</source_yp>
+						<target_xp>-1</target_xp>
+						<target_yp>-1</target_yp>
+						<color>
+							<r>0</r>
+							<g>0</g>
+							<b>0</b>
+						</color>
+					<child_cardinality>1..n</child_cardinality>
+					<parent_cardinality>1</parent_cardinality>
+					<reference_for_pk>true</reference_for_pk>
+					<name>FMT_FORMREGI_PILA_MOTIFORM_PK</name>
 					<on_delete_action>RESTRICT</on_delete_action>
 					<on_update_action>RESTRICT</on_update_action>
 					<referenced_column>null</referenced_column>
@@ -1786,7 +1786,7 @@
 				<normal_column>
 					<id>19</id>
 					<referenced_column>0</referenced_column>
-					<relation>2</relation>
+					<relation>3</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
 					<logical_name>MOFOFORE</logical_name>
@@ -1820,7 +1820,7 @@
 				<normal_column>
 					<id>20</id>
 					<referenced_column>24</referenced_column>
-					<relation>3</relation>
+					<relation>2</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
 					<logical_name>MOFODEVO</logical_name>

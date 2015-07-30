@@ -21,7 +21,7 @@
 		      <div class="modal-header">
 		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 		        <h4 class="modal-title" id="myModalLabel"><label ng-bind-html="title |to_trusted"></label></h4>
-		    	<h4>Por favor, ingrese los siguientes datos para consultar la informaci&oacute;n. <br>(<font color="red">*</font>) Campos obligatorios.</br><h4>
+		    	<h6>Por favor, ingrese los siguientes datos para consultar la informaci&oacute;n. <br>(<font color="red">*</font>) Campos obligatorios.</br><h6>
 		      </div>
 		      <div class="modal-body">
 		        <form name="formInsert" class="form-horizontal" role="form">
@@ -29,10 +29,11 @@
 			  	
 				   	<div class="form-group">
 					   <label for="file" class="col-sm-3 control-label"><font color="red">*</font>Seleccione el adjunto: </label>
-					   <div class="col-sm-3">			
+					   <div class="col-sm-9">			
 						 <input type="file" ng-file-select ng-model="picFile" name="file" multiple="multiple" required>
 					   </div>
-				    </div>
+					   <div class="col-sm-9"><h6>Sino adjunta un nuevo archivo, se mantendr&aacute; el cargado previamente</h6></div>
+				    </div>					    	   
 	  			</form>
 		      </div>
 		      <div class="modal-footer">
@@ -171,7 +172,7 @@
 				            	<div class="form-group" >
 			            		  	  <label for="mofodesc" class="col-sm-2 control-label">{{ whatClassIsIt("mofodesc") }}</label>
 									  <div class="col-sm-10">			
-										<textarea style="width:100%;" name ="mofodesc" id="mofodesc" ng-model="mofodesc" ng-trim="false"></textarea>
+										<textarea style="width:100%;" name ="mofodesc" id="mofodesc" ng-model="mofodesc" ng-trim="false" rows="15"></textarea>
 									  </div>							  
 				            	</div>
 				            	<div class="form-group" >
