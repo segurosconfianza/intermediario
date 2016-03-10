@@ -61,8 +61,7 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	    	    	    		columns=[];
 	    	    	    		columns[0]={field: "forecons", displayName: getName(Service.getI18n(), "forecons"), headerCellTemplate: filterBetweenNumber};
 	    	    	    		columns[1]={field: "forefech", displayName: getName(Service.getI18n(), "forefech"), headerCellTemplate: filterBetweenDate};
-	    	    	    		columns[2]={field: "foreesta", displayName: getName(Service.getI18n(), "foreesta"), visible: false};
-	    	    	    		columns[3]={field: "tablvast", displayName: getName(Service.getI18n(), "foreesta"), headerCellTemplate: filterText, cellTemplate: '<div><img src="{{icons[row.getProperty(col.field)]}}" width="20" height="20"></img>{{row.getProperty(col.field)}}</div>' };
+	    	    	    		columns[2]={field: "tablvast", displayName: getName(Service.getI18n(), "foreesta"), headerCellTemplate: filterText, cellTemplate: '<div><img src="{{icons[row.getProperty(col.field)]}}" width="20" height="20"></img>{{row.getProperty(col.field)}}</div>' };
 	    	    	    		//recorro los campos para cargar los data de los combos
 	    	    	    		angular.forEach($scope.columns, function(reg, index) {
 			    	    			//si el tipo de dato es columna
@@ -79,13 +78,13 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	    	    	    			}
 	    	    	    			
 	    	    	    			if(reg.camptipo=="D" || reg.camptipo=="T")
-	    	    	    				columns[index+4]={field: reg.campnomb, displayName: reg.camplabe, headerCellTemplate: filterBetweenDate};
+	    	    	    				columns[index+3]={field: reg.campnomb, displayName: reg.camplabe, headerCellTemplate: filterBetweenDate};
 	    	    	    			else if(reg.camptipo=="O" || reg.camptipo=="I" || reg.camptipo=="L" || reg.camptipo=="F")
-	    	    	    				columns[index+4]={field: reg.campnomb, displayName: reg.camplabe, headerCellTemplate: filterBetweenNumber, cellTemplate:'<div>{{row.getProperty(col.field) | number}}</div>'};
+	    	    	    				columns[index+3]={field: reg.campnomb, displayName: reg.camplabe, headerCellTemplate: filterBetweenNumber, cellTemplate:'<div>{{row.getProperty(col.field) | number}}</div>'};
 	    	    	    			else if(reg.camptipo=="B")
-	    	    	    				columns[index+4]={field: reg.campnomb, displayName: reg.camplabe, headerCellTemplate: filterBetweenNumber};
+	    	    	    				columns[index+3]={field: reg.campnomb, displayName: reg.camplabe, headerCellTemplate: filterBetweenNumber};
 	    	    	    			else
-	    	    	    				columns[index+4]={field: reg.campnomb, displayName: reg.camplabe, headerCellTemplate: filterText};
+	    	    	    				columns[index+3]={field: reg.campnomb, displayName: reg.camplabe, headerCellTemplate: filterText};
 			    	        	});	
 	    	    	    		
 	    	    	    		$scope.columnDefs=columns;	
@@ -101,7 +100,7 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	}
 	
     $scope.gridOptions = {  
-    	sortInfo:{ fields: ['foreesta'], directions: ['desc']}, 
+    	sortInfo:{ fields: ['tablvast'], directions: ['desc']}, 
     	selectedItems: [],
         afterSelectionChange: function (rowItem, event) {
         	angular.forEach($scope.columns, function(reg) {
